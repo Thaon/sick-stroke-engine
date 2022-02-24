@@ -90,6 +90,18 @@ export class EngineCore {
     this.rooms[this.currentRoom]?.updateRoom();
 
     p5.background(255);
+
+    //draw all GameObject sprites
+    this.rooms[this.currentRoom]?.objects.forEach((object) => {
+      let sprite = object.sprites[0];
+      p5.image(
+        sprite,
+        object.x,
+        object.y,
+        sprite.width * object.scale,
+        sprite.height * object.scale
+      );
+    });
   };
 
   //rooms
@@ -132,7 +144,8 @@ export class EngineCore {
 }
 
 export class GameObject {
-  constructor() {
+  constructor(name) {
+    this.name = name;
     this.sprites = [];
     this.x = 0;
     this.y = 0;
