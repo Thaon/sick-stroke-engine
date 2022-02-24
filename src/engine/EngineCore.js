@@ -38,6 +38,7 @@
  * width, height
  * zoom
  */
+import Game from "../Game/Game";
 
 export class EngineCore {
   constructor() {
@@ -50,7 +51,7 @@ export class EngineCore {
   }
 
   //assets
-  Run = (assetsList, p5) => {
+  Run = (p5) => {
     /**
      * asset = {
      *   name : string,
@@ -58,16 +59,16 @@ export class EngineCore {
      * }
      */
     this.images = [];
-    assetsList.forEach((asset, index) => {
+    Game.Assets.forEach((asset, index) => {
       p5.loadImage(
         asset.path,
         (img) => {
           console.log(
-            "Loading " + Number(index + 1) + " of " + assetsList.length
+            "Loading " + Number(index + 1) + " of " + Game.Assets.length
           );
           this.images.push(img);
 
-          if (index == assetsList.length - 1) {
+          if (index == Game.Assets.length - 1) {
             console.log("All loaded");
             this.Start();
           }
@@ -81,6 +82,7 @@ export class EngineCore {
 
   //core
   Start = (p5) => {
+    Game.Setup(this);
     this.rooms[this.currentRoom]?.initRoom();
   };
 
