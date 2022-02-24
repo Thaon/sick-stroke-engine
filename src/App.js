@@ -1,20 +1,22 @@
 import Main from "./engine/Main";
+import { EngineCore } from "./engine/EngineCore";
+import Game from "./Game/Game";
+
 import { useEffect } from "react";
 
 function App() {
-  let assets = [
-    {
-      name: "player",
-      path: "./assets/circle.png",
-    },
-  ];
+  const Engine = new EngineCore();
 
-  useEffect(() => {}, []);
+  console.log(Game.Assets);
+
+  useEffect(() => {
+    Game.Setup(Engine);
+  }, []);
 
   return (
     <div className="App">
       <h1>Sick Stroke Engine</h1>
-      <Main assets={assets} />
+      <Main game={Engine} assets={Game.Assets} />
     </div>
   );
 }

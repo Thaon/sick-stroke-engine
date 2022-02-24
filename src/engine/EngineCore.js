@@ -57,8 +57,26 @@ export class EngineCore {
      *   path: string
      * }
      */
+    this.images = [];
+    assetsList.forEach((asset, index) => {
+      p5.loadImage(
+        asset.path,
+        (img) => {
+          console.log(
+            "Loading " + Number(index + 1) + " of " + assetsList.length
+          );
+          this.images.push(img);
 
-    this.Start();
+          if (index == assetsList.length - 1) {
+            console.log("All loaded");
+            this.Start();
+          }
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    });
   };
 
   //core
@@ -69,8 +87,29 @@ export class EngineCore {
   Update = (p5) => {
     this.rooms[this.currentRoom]?.updateRoom();
 
-    p5.background(0);
-    p5.ellipse(10, 10, 70, 70);
+    p5.background(255);
+  };
+
+  //rooms
+  CreateRoom = (roomName, w, h) => {
+    let newRoom = new Room({ name: roomName, width: w, height: h });
+    this.rooms.push(newRoom);
+    return newRoom;
+  };
+
+  FindRoom = (roomName) => {
+    let room = this.rooms.find((room) => room.name == roomName);
+    return room;
+  };
+
+  SetCurrentRoom = (roomName) => {
+    this.currentRoom = this.rooms.findIndex((room) => room.name == roomName);
+    if (this.currentRoom == -1) {
+      console.log("Room not found");
+    } else {
+      this.rooms[this.currentRoom]?.initRoom();
+      return this.rooms[this.currentRoom];
+    }
   };
 
   //utility
@@ -107,6 +146,7 @@ export class GameObject {
 
 export class Room {
   constructor(config) {
+    this.name = config.name;
     this.objects = [];
     this.width = config.width;
     this.height = config.height;
